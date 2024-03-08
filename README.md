@@ -1,0 +1,2 @@
+# MglExamples
+msvcore OpenGL examples
