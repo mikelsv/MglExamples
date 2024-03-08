@@ -13,13 +13,6 @@ out highp vec4 fragColor;
 out vec4 pointColor;
 
 void main(){
-//	gl_Position = vec4((pointCoord.xy - iMove.xy) / iResolution * iZoom * xZoom, 0.0, 1.0);
-gl_Position = vec4(((pointCoord.xy - iMove.xy) / iResolution * 2. - 1) * iZoom, 0.0, 1.0);
-
-
-	//vec2 transformed_coord = (pointCoord.xy * iZoom) + iMove;
-//vec2 out_coord = (vec2(2.0) * transformed_coord / iResolution) - vec2(1.0);
-//gl_Position = vec4(out_coord, 0., 1.);
-
+	gl_Position = vec4(((pointCoord.xy * iZoom - iMove.xy ) / iResolution * 2. - 1), 0.0, 1.0);
 	pointColor = colorCoord;
 }
