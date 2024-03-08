@@ -24,6 +24,7 @@ Open MglExamples.cpp. Find defines section and configure it. (Uncomment for use)
 #define MGL_EXAMPLE_TRIANGLE // Show triangle
 #define MGL_EXAMPLE_TEXTURE // Show texture
 #define MGL_EXAMPLE_SHADER // Show shader like shadertoy: glsl/shader.fs
+#define MGL_EXAMPLE_OBJECTS // Show objects circles and lines
 #define MGL_EXAMPLE_MENU // Show shader menu on Right click
 #define MGL_EXAMPLE_POPUP // Show popup messages
 ```
@@ -37,8 +38,13 @@ Draw texture. By default load glsl/font.bin (binary version on font.png). Based 
 ### MGL_EXAMPLE_SHADER
 Draw shader: glsl/shader.vs + glsl/shader.fs. Like as shadertoy.com. Based on GlslShader in Glsl.h.
 
+### MGL_EXAMPLE_OBJECTS
+Draw primitives. Circles and paths. See code in MglExamples.cpp: lay.AddCircle(X, Y, DIA); Based on GlslObjects in Glsl.h.
+
 ### MGL_EXAMPLE_MENU
 Draw menu on Right click. Shaders: glsl/menu.vs + glsl/menu.fs. Based on MglMenu in https://github.com/mikelsv/msvcore2/blob/master/opengl/mgl_shader_gui.h
 
 ### MGL_EXAMPLE_POPUP
 Draw popup message. On start program. Or on Drag & Drop file to window. Shaders: glsl/popup.vs & glsl/popup.fs. Based on MglPopUp in https://github.com/mikelsv/msvcore2/blob/master/opengl/mgl_shader_gui.h
+
+![MglExamples](https://github.com/mikelsv/MglExamples/blob/main/screenshot/mgle0.0.0.2.jpg)

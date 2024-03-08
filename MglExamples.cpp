@@ -13,6 +13,7 @@
 
 Versions PROJECTVER[] = {
     // new version to up
+	"0.0.0.2", "08.03.2024 18:30",
 	"0.0.0.1", "08.03.2024 12:17"
 };
 
@@ -26,12 +27,12 @@ Versions PROJECTVER[] = {
 
 ////////////////////////////////////////////////////////////////////
 // Select examples here <<<-----------------------------------------
-#define MGL_EXAMPLE_TRIANGLE // Show triangle
+//#define MGL_EXAMPLE_TRIANGLE // Show triangle
 //#define MGL_EXAMPLE_TEXTURE // Show texture
-//#define MGL_EXAMPLE_SHADER // Show shader like shadertoy: glsl/shader.fs
-//#define MGL_EXAMPLE_MENU // Show shader menu on Right click
-//#define MGL_EXAMPLE_POPUP // Show popup messages
-
+#define MGL_EXAMPLE_SHADER // Show shader like shadertoy: glsl/shader.fs
+#define MGL_EXAMPLE_OBJECTS // Show objects circles and lines
+#define MGL_EXAMPLE_MENU // Show shader menu on Right click
+#define MGL_EXAMPLE_POPUP // Show popup messages
 // End select examples
 ////////////////////////////////////////////////////////////////////
 
@@ -66,11 +67,41 @@ int main(int args, char* arg[], char* env[]){
 	// OpgnGL Debug
 	MsvGlDebug(1, 0);
 
+	// Random init
+	srand(time());
+
 	// Init windows
 	MglWindows.Init();
 	WndResize(window, MglWindows.screen.x, MglWindows.screen.y);
 
-	// PopUp if active
+	// Add objects if active (MGL_EXAMPLE_OBJECTS)
+	if(MglWindows.glsl_objects.GetProgramId()){
+		GlslLayer &lay = MglWindows.layer;
+
+		// Add circle 
+		lay.AddCircle(0, 0, 100);
+
+		lay.AddCircle(200, 200, 100);
+
+		// Add circle
+		//for(int x = -100; x < 100; x += 100){
+		//	for(int y = -100; y < 100; y += 100){
+		//		lay.AddCircle(x, y, 100);
+		//	}
+		//}
+		
+		// Add path
+		lay.AddPath();
+		lay.AddPoi(10, 10);
+		lay.AddPoi(100, 10);
+		lay.AddPoi(100, 100);
+		lay.AddPoi(10, 100);
+
+		// Set data to glsl
+		MglWindows.layer.Draw(MglWindows.glsl_objects);
+	}
+
+	// PopUp if active (MGL_EXAMPLE_POPUP)
 	MglWindows.InsertPopUp(LString() + "Wellcome to MglExamples " + PROJECTVER[0].ver + ".");
 	MglWindows.InsertPopUp(LString() + "We have a cookies!");
 

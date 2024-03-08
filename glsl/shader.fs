@@ -44,8 +44,11 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord){
     // Draw grid
     drawGrid(fragColor, fragCoord);
 
+    if(fragCoord.x < 0)
+        fragColor -= vec4(.50);
+
     // Mouse cursor
-    drawMouseCursor(fragColor, fragCoord - iMouse.xy / iZoom);
+    drawMouseCursor(fragColor, fragCoord - (iMouse.xy + iMove) / iZoom);
 }
 
 float PrintChars(vec2 p, int text[16]){
@@ -151,11 +154,11 @@ void toolBar(inout vec4 fragColor, in vec2 fragCoord){
         // XY
         text_any[1] = 88;
         fragColor.xyz -= PrintChars(PrintCharsCoord(fragCoord, vec2(200., -10.), 50.), text_any);
-        fragColor.xyz -= PrintFloatP2(PrintCharsCoord(fragCoord, vec2(240., -10.), 50.), iMouse.x + iMove.x / iZoom);
+        fragColor.xyz -= PrintFloatP2(PrintCharsCoord(fragCoord, vec2(240., -10.), 50.), (iMouse.x + iMove.x) / iZoom);
 
         text_any[1] = 89;
         fragColor.xyz -= PrintChars(PrintCharsCoord(fragCoord, vec2(500., -10.), 50.), text_any);
-        fragColor.xyz -= PrintFloatP2(PrintCharsCoord(fragCoord, vec2(540., -10.), 50.), iMouse.y + iMove.y / iZoom);
+        fragColor.xyz -= PrintFloatP2(PrintCharsCoord(fragCoord, vec2(540., -10.), 50.), (iMouse.y + iMove.y) / iZoom);
     }
 
     // FPS

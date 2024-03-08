@@ -1,18 +1,23 @@
 #define MGL_ZOOM_MAX	25000
 #define MGL_ZOOM_MIN	.05
+#define MGL_YSCALE -1
 
 class MglWindows{
 public:
 	// Screen
-	KiVec2 screen, move, mouse;
-	float zoom;
+	KiVec2 screen, move, mouse, mouse_hold;
+	float zoom, mouse_down_2;
 
 	// Glsl
 	MglSimpleGlslTriangle glsl_triangle;
 	MglGlslTexture glsl_texture;
 	GlslShader glsl_shader;
+	GlslObjects glsl_objects;
 	MglMenu glsl_menu;
 	MglPopUp glsl_popup;
+
+	// Layer for GlslObjects
+	GlslLayer layer;
 
 	// Timer
 	MTimer ttime;
@@ -27,7 +32,10 @@ public:
 		screen = KiInt2(1024, 768);
 		move = KiInt2(0, 0);
 		zoom = 1.;
+
+		// Zero
 		fps_time = 0;
+		mouse_down_2 = 0;
 	}
 
 	// Init
@@ -46,6 +54,11 @@ public:
 #ifdef MGL_EXAMPLE_SHADER
 		glsl_shader.Init();
 		glsl_shader.SetFont(GlslFontTexture.GetTexture());
+#endif
+
+#ifdef MGL_EXAMPLE_OBJECTS
+		glsl_objects.Init();
+		glsl_objects.UpdateZoom(1);
 #endif
 
 #ifdef MGL_EXAMPLE_MENU
@@ -76,6 +89,9 @@ public:
 		if(glsl_shader.GetProgramId())
 			glsl_shader.UpdateRes(screen);
 
+		if(glsl_objects.GetProgramId())
+			glsl_objects.UpdateRes(screen);
+
 		if(glsl_popup.GetProgramId())
 			glsl_popup.UpdateRes(screen);
 	}
@@ -97,6 +113,20 @@ public:
 	// Mouse
 	void UpdateMouseMove(double x, double y){
 		mouse = KiVec2(x, y);
+
+		if(mouse_down_2){
+			KiVec2 delta = mouse_hold - KiVec2(x, y);
+			move += KiVec2(delta.x, delta.y * MGL_YSCALE);
+			mouse_hold = KiVec2(x, y);
+
+			// Update
+			if(glsl_shader.GetProgramId())
+				glsl_shader.UpdateMove(move);
+
+			if(glsl_objects.GetProgramId())
+				glsl_objects.UpdateMove(move);
+		}
+
 
 		if(glsl_shader.GetProgramId())
 			glsl_shader.UpdateMouseSelect(KiVec2(x, screen.y - y), KiVec2(0), 0);
@@ -133,6 +163,17 @@ public:
 			glsl_popup.OnCLick(KiVec2(mouse.x, screen.y - mouse.y));
 		}
 
+		// Move
+		if(button == GLFW_MOUSE_BUTTON_3){
+			if(action == 1){
+				mouse_down_2 = 1;
+				mouse_hold = mouse;
+			}
+			else{
+				mouse_down_2 = 0;
+				mouse_hold = KiVec2();
+			}
+		}
 	}
 
 	void UpdateMouseZoom(int offset){
@@ -148,6 +189,9 @@ public:
 		// Update shaders
 		if(glsl_shader.GetProgramId())
 			glsl_shader.UpdateZoom(zoom);
+
+		if(glsl_objects.GetProgramId())
+			glsl_objects.UpdateZoom(zoom);
 	}
 
 	// Render
@@ -163,6 +207,9 @@ public:
 
 		if(glsl_shader.GetProgramId())
 			glsl_shader.Render(iTime);
+
+		if(glsl_objects.GetProgramId())
+			glsl_objects.Render();
 
 		if(glsl_menu.GetProgramId())
 			glsl_menu.Render(iTime);
