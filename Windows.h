@@ -127,7 +127,6 @@ public:
 				glsl_objects.UpdateMove(move);
 		}
 
-
 		if(glsl_shader.GetProgramId())
 			glsl_shader.UpdateMouseSelect(KiVec2(x, screen.y - y), KiVec2(0), 0);
 

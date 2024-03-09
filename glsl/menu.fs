@@ -19,7 +19,7 @@ struct _MenuOptions{
     vec4 textColor, bgColor, borderColor, activeColor;
 };
 
-layout(std140, binding = 2) uniform asda{
+layout(std140, binding = 2) uniform MenuOptionsId{
 _MenuOptions MenuOptions;
 };
 
